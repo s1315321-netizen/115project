@@ -34,7 +34,7 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 64
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -69,8 +69,8 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 3
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 1
     textureFormat: 4
     textureCompression: 1
     compressionQuality: 50
@@ -93,354 +93,89 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
-    buildTarget: Android
-    maxTextureSize: 2048
-    resizeAlgorithm: 0
-    textureFormat: -1
-    textureCompression: 1
-    compressionQuality: 50
-    crunchedCompression: 0
-    allowsAlphaSplitting: 0
-    overridden: 0
-    ignorePlatformSupport: 0
-    androidETC2FallbackOverride: 0
-    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: stand_1
+      name: player_0
       rect:
         serializedVersion: 2
-        x: 28
-        y: 1182
-        width: 280
-        height: 369
+        x: 0
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: fe813b6a4090893489db37413b592b14
-      internalID: 500164660
+      spriteID: b9bbe74caec3301478aee72d83629c97
+      internalID: -1814293882
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stand_2
+      name: player_1
       rect:
         serializedVersion: 2
-        x: 346
-        y: 1189
-        width: 248
-        height: 366
+        x: 32
+        y: 32
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1317a056937f0c84b868666e5ceb8286
-      internalID: 1426630198
+      spriteID: 269a309d8863f4343ab0d9b67b909183
+      internalID: 1444945506
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stand_3
+      name: player_2
       rect:
         serializedVersion: 2
-        x: 637
-        y: 1182
-        width: 267
-        height: 375
+        x: 0
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 62c089461a539a646beb3c16f5255ea9
-      internalID: 617830254
+      spriteID: 3426a36ef7fc4dd468716c363022c5b4
+      internalID: 107617317
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: stand_4
+      name: player_3
       rect:
         serializedVersion: 2
-        x: 929
-        y: 1196
-        width: 279
-        height: 371
+        x: 32
+        y: 0
+        width: 32
+        height: 32
       alignment: 0
-      pivot: {x: 0.5, y: 0.5}
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 686230cdcd3753842868985cc96bb5c8
-      internalID: 1899035348
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: up_1
-      rect:
-        serializedVersion: 2
-        x: 50
-        y: 709
-        width: 260
-        height: 396
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 0ab5b30310004cf49b860a5ad8d670ae
-      internalID: 271863305
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: up_2
-      rect:
-        serializedVersion: 2
-        x: 343
-        y: 710
-        width: 267
-        height: 391
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 70811f82df73e7a43aa531d8fe03ffaa
-      internalID: -1350630266
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: up_3
-      rect:
-        serializedVersion: 2
-        x: 623
-        y: 700
-        width: 266
-        height: 385
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 3ba7e8e360459ef439cb7374964bd57f
-      internalID: -1487842401
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: up_4
-      rect:
-        serializedVersion: 2
-        x: 922
-        y: 702
-        width: 267
-        height: 375
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: d1ec570b395aaaf4ba258a6950773f59
-      internalID: 2127263664
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: down1
-      rect:
-        serializedVersion: 2
-        x: 1302
-        y: 706
-        width: 286
-        height: 376
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4b88f9d6752788e42b5041f5575d4566
-      internalID: 1575025748
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: down2
-      rect:
-        serializedVersion: 2
-        x: 1609
-        y: 701
-        width: 270
-        height: 376
-      alignment: 9
-      pivot: {x: 0.49277252, y: 0.49481022}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 4eb5f5a442291e94aa571170004469dd
-      internalID: -644805998
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: down3
-      rect:
-        serializedVersion: 2
-        x: 1905
-        y: 705
-        width: 252
-        height: 377
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 967e81797705fb24d8dad9a69f1af1b5
-      internalID: 1866445106
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: down4
-      rect:
-        serializedVersion: 2
-        x: 2195
-        y: 695
-        width: 269
-        height: 383
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9937d6039f71c7f46afa607864fd45e5
-      internalID: -276533916
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walk4
-      rect:
-        serializedVersion: 2
-        x: 2169
-        y: 176
-        width: 272
-        height: 388
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: c925f6d0f66261f4eb9de8f9782eba6a
-      internalID: 2089280706
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walk3
-      rect:
-        serializedVersion: 2
-        x: 1893
-        y: 174
-        width: 261
-        height: 394
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9af42a50ca4be2a4aa84b941710fd662
-      internalID: 1249975700
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walk2
-      rect:
-        serializedVersion: 2
-        x: 1599
-        y: 173
-        width: 275
-        height: 398
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 34bffe9e4a0ac404baa8068e166658b2
-      internalID: 1908297405
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walk1
-      rect:
-        serializedVersion: 2
-        x: 1311
-        y: 174
-        width: 267
-        height: 394
-      alignment: 0
-      pivot: {x: 0.5, y: 0.5}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 80eb2da5fd2b7534cb5d2de7c38f1079
-      internalID: 1148704439
+      spriteID: 21341649dd9c4b047a1bc8790f919975
+      internalID: -1994037492
       vertices: []
       indices: 
       edges: []
@@ -456,22 +191,10 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      down1: 1575025748
-      down2: -644805998
-      down3: 1866445106
-      down4: -276533916
-      stand_1: 500164660
-      stand_2: 1426630198
-      stand_3: 617830254
-      stand_4: 1899035348
-      up_1: 271863305
-      up_2: -1350630266
-      up_3: -1487842401
-      up_4: 2127263664
-      walk1: 1148704439
-      walk2: 1908297405
-      walk3: 1249975700
-      walk4: 2089280706
+      player_0: -1814293882
+      player_1: 1444945506
+      player_2: 107617317
+      player_3: -1994037492
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
