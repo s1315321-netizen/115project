@@ -13,8 +13,11 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 inputDir = Vector2.zero;
     private Vector3 initialScale;
 
-    // 記錄角色最後面向的水平方位（1 朝右，-1 朝左），預設朝右
+    // 記錄角色最後面向的水平方位（1 朝右，-1 朝左），專門用來翻轉身體
     private float lastFacingX = 1f;
+
+    // 新增：記錄角色最後一次的完整移動方向（上下左右），專門給手電筒用
+    private Vector2 lastFacingDir = Vector2.down; // 預設遊戲開始時朝下
 
     // 四方向鎖定狀態
     private enum LockAxis { None, Horizontal, Vertical }
@@ -69,14 +72,20 @@ public class PlayerMovement : MonoBehaviour
             inputDir = Vector2.zero;
         }
 
-        // 2. 有水平移動時，更新左右朝向並翻轉主角
+        // 2. 只要有移動，就記錄最後的十字移動方向 (給手電筒待機時使用)
+        if (inputDir != Vector2.zero)
+        {
+            lastFacingDir = inputDir;
+        }
+
+        // 3. 有水平移動時，更新左右朝向並翻轉主角
         if (inputDir.x != 0f)
         {
             lastFacingX = Mathf.Sign(inputDir.x); // 記錄是左還是右
             transform.localScale = new Vector3(Mathf.Abs(initialScale.x) * lastFacingX, initialScale.y, initialScale.z);
         }
 
-        // 3. 動畫參數更新
+        // 4. 動畫參數更新
         if (anim != null)
         {
             anim.SetFloat("Speed", inputDir.magnitude);
@@ -87,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
 
     void LateUpdate()
     {
-        // 4. 更新手電筒角度
+        // 5. 更新手電筒角度
         UpdateFlashlight();
     }
 
@@ -109,9 +118,8 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            // 【待機中】：強制切回純左或純右（依最後面向的 X）
-            // -90f 為朝右，90f 為朝左
-            angle = (lastFacingX > 0) ? -90f : 90f;
+            // 【待機中】：維持最後一次記錄的十字移動方向（上下左右）
+            angle = Mathf.Atan2(lastFacingDir.y, lastFacingDir.x) * Mathf.Rad2Deg - 90f;
         }
 
         flashlight.rotation = Quaternion.Euler(0, 0, angle);
