@@ -3,6 +3,7 @@ using UnityEngine;
 public class PauseManager : MonoBehaviour
 {
     public GameObject pauseMenuUI;   // 把整個 PauseMenu 面板拖進來（裡面包含三顆按鈕）
+    public GameObject OptionsMenuUI;
 
     void Update()
     {
@@ -30,6 +31,19 @@ public class PauseManager : MonoBehaviour
         pauseMenuUI.SetActive(false);
         Time.timeScale = 1f;
     }
+
+    public void OpenOptions()
+    {
+        if (pauseMenuUI != null) pauseMenuUI.SetActive(false);
+        OptionsMenuUI.SetActive(true);
+    }
+
+    public void CloseOptions()
+    {
+        OptionsMenuUI.SetActive(false);
+        if (pauseMenuUI != null) pauseMenuUI.SetActive(true);
+    }
+
 
     public void QuitGame()
     {

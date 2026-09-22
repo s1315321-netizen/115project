@@ -6,6 +6,7 @@ public class ViewPainting : Interactable
     [Header("畫作的 UI 畫面")]
     public GameObject paintingUI;
     public GameObject paintingText;
+    public GameObject gray;
 
     private bool isViewing = false;
     private PlayerMovement playerMovement; // 用來記錄主角的移動腳本
@@ -28,6 +29,7 @@ public class ViewPainting : Interactable
         {
             paintingUI.SetActive(isViewing);
             paintingText.SetActive(isViewing);
+            gray.SetActive(isViewing);
         }
 
         // 控制主角能不能移動
