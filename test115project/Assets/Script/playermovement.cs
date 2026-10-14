@@ -1,28 +1,23 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody2D))]
 public class PlayerMovement : MonoBehaviour
 {
-    [Header("--- 移動設定 ---")]
+    [Header("--- Movement Settings ---")]
     public float speed = 5f;
     public Animator anim;
 
-    [Header("--- 手電筒物件 ---")]
-    public Transform flashlight; // Inspector 拖入手電筒子物件
+    [Header("--- Flashlight Object ---")]
+    public Transform flashlight; // Inspector 拖入手電筒 Transform
 
     private Rigidbody2D rb;
     private Camera mainCamera;
     private Vector2 inputDir = Vector2.zero;
     private Vector3 initialScale;
 
-    // 關鍵：記錄最後移動的方向（預設朝下），供待機動畫使用
-    private Vector2 lastMoveDir = Vector2.down;
-
-    // 單軸十字鎖定（嚴格四方向，防止斜向造成動畫錯亂）
-    private enum LockAxis { None, Horizontal, Vertical }
-    private LockAxis currentLock = LockAxis.None;
+    // SOCD 後輸入優先按鍵記錄清單
+    private List<KeyCode> activeMoveKeys = new List<KeyCode>();
 
     void Start()
     {
@@ -33,13 +28,16 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
-        HandleMovementInput();
-        UpdateCharacterSprite();
+        if (PauseManager.IsGamePaused) return;
+        HandleSOCDMovementInput();
+        UpdateCharacterOrientation();
         UpdateAnimator();
     }
 
     void LateUpdate()
     {
+        if (PauseManager.IsGamePaused) return; // 暫停時手電筒不跟隨滑鼠
+        UpdateFlashlightAim();
         UpdateFlashlightAim();
     }
 
@@ -48,87 +46,141 @@ public class PlayerMovement : MonoBehaviour
         rb.velocity = inputDir * speed;
     }
 
-    // 1. 單軸十字鎖定輸入處理
-    private void HandleMovementInput()
+    // ==========================================
+    // 1. SOCD (後輸入優先) 嚴格四方向處理
+    // ==========================================
+    private void HandleSOCDMovementInput()
     {
-        float h = Input.GetAxisRaw("Horizontal");
-        float v = Input.GetAxisRaw("Vertical");
+        // 監聽按下：最新按下的方向排在最末端（優先度最高）
+        if (Input.GetKeyDown(KeyCode.W)) RegisterKey(KeyCode.W);
+        if (Input.GetKeyDown(KeyCode.S)) RegisterKey(KeyCode.S);
+        if (Input.GetKeyDown(KeyCode.A)) RegisterKey(KeyCode.A);
+        if (Input.GetKeyDown(KeyCode.D)) RegisterKey(KeyCode.D);
 
-        if (currentLock == LockAxis.None)
+        // 監聽放開：從清單移除
+        if (Input.GetKeyUp(KeyCode.W)) UnregisterKey(KeyCode.W);
+        if (Input.GetKeyUp(KeyCode.S)) UnregisterKey(KeyCode.S);
+        if (Input.GetKeyUp(KeyCode.A)) UnregisterKey(KeyCode.A);
+        if (Input.GetKeyUp(KeyCode.D)) UnregisterKey(KeyCode.D);
+
+        // 防呆清理：防止視窗切換等邊緣情況遺失放開事件
+        for (int i = activeMoveKeys.Count - 1; i >= 0; i--)
         {
-            if (h != 0f) currentLock = LockAxis.Horizontal;
-            else if (v != 0f) currentLock = LockAxis.Vertical;
+            if (!Input.GetKey(activeMoveKeys[i]))
+            {
+                activeMoveKeys.RemoveAt(i);
+            }
         }
 
-        if (currentLock == LockAxis.Horizontal)
+        // 永遠取最後按下的那個按鍵作為前進方向
+        if (activeMoveKeys.Count > 0)
         {
-            if (h == 0f)
+            KeyCode latestKey = activeMoveKeys[activeMoveKeys.Count - 1];
+            switch (latestKey)
             {
-                currentLock = LockAxis.None;
-                inputDir = Vector2.zero;
-            }
-            else
-            {
-                inputDir = new Vector2(h, 0f).normalized;
-            }
-        }
-        else if (currentLock == LockAxis.Vertical)
-        {
-            if (v == 0f)
-            {
-                currentLock = LockAxis.None;
-                inputDir = Vector2.zero;
-            }
-            else
-            {
-                inputDir = new Vector2(0f, v).normalized;
+                case KeyCode.W: inputDir = Vector2.up; break;
+                case KeyCode.S: inputDir = Vector2.down; break;
+                case KeyCode.A: inputDir = Vector2.left; break;
+                case KeyCode.D: inputDir = Vector2.right; break;
             }
         }
         else
         {
             inputDir = Vector2.zero;
         }
+    }
 
-        // 只要有在走動，立刻更新歷史方向
+    private void RegisterKey(KeyCode key)
+    {
+        if (activeMoveKeys.Contains(key))
+        {
+            activeMoveKeys.Remove(key);
+        }
+        activeMoveKeys.Add(key);
+    }
+
+    private void UnregisterKey(KeyCode key)
+    {
+        activeMoveKeys.Remove(key);
+    }
+
+    // ==========================================
+    // 2. 身體轉向：走路面向行進方向，靜止面向游標
+    // ==========================================
+    private void UpdateCharacterOrientation()
+    {
         if (inputDir != Vector2.zero)
         {
-            lastMoveDir = inputDir;
+            // 【走路中】：依照走路方向翻轉 Sprite
+            if (inputDir.x != 0f)
+            {
+                float facingX = Mathf.Sign(inputDir.x);
+                transform.localScale = new Vector3(Mathf.Abs(initialScale.x) * facingX, initialScale.y, initialScale.z);
+            }
         }
-    }
-
-    // 2. 身體左右翻轉（只在有水平移動時翻轉，維持上下行走的正確朝向）
-    private void UpdateCharacterSprite()
-    {
-        if (inputDir.x != 0f)
+        else
         {
-            float facingX = Mathf.Sign(inputDir.x);
-            transform.localScale = new Vector3(Mathf.Abs(initialScale.x) * facingX, initialScale.y, initialScale.z);
+            // 【靜止待機】：始終面向滑鼠游標所在側
+            if (mainCamera != null)
+            {
+                Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                float facingX = (mouseWorldPos.x >= transform.position.x) ? 1f : -1f;
+                transform.localScale = new Vector3(Mathf.Abs(initialScale.x) * facingX, initialScale.y, initialScale.z);
+            }
         }
     }
 
-    // 3. 動畫參數更新：Speed 用當前輸入，方向用最後記錄
+    // ==========================================
+    // 3. 動畫狀態機更新
+    // ==========================================
     private void UpdateAnimator()
     {
         if (anim == null) return;
 
-        // Speed 歸零時觸發切換到待機 (Idle)
-        anim.SetFloat("Speed", inputDir.magnitude);
+        if (inputDir != Vector2.zero)
+        {
+            // 【走路中】：速度為 1，動畫播放行走方向
+            anim.SetFloat("Speed", 1f);
+            anim.SetFloat("Vertical", inputDir.y);
+            anim.SetFloat("Horizontal", Mathf.Abs(inputDir.x));
+        }
+        else
+        {
+            // 【靜止待機】：速度為 0，動畫方向跟隨游標的角度
+            anim.SetFloat("Speed", 0f);
 
-        // 關鍵：傳遞 lastMoveDir，停下時依然保有最後走動的朝向！
-        anim.SetFloat("Vertical", lastMoveDir.y);
-        anim.SetFloat("Horizontal", Mathf.Abs(lastMoveDir.x));
+            if (mainCamera != null)
+            {
+                Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
+                Vector2 aimDir = (mouseWorldPos - transform.position).normalized;
+
+                // 判斷游標是偏上下還是偏左右
+                if (Mathf.Abs(aimDir.y) > Mathf.Abs(aimDir.x))
+                {
+                    // 游標在上方（抬頭待機）或下方（低頭待機）
+                    anim.SetFloat("Vertical", Mathf.Sign(aimDir.y));
+                    anim.SetFloat("Horizontal", 0f);
+                }
+                else
+                {
+                    // 游標在左右兩側（側面待機）
+                    anim.SetFloat("Vertical", 0f);
+                    anim.SetFloat("Horizontal", 1f);
+                }
+            }
+        }
     }
 
-    // 4. 手電筒 360 度對準滑鼠游標
+    // ==========================================
+    // 4. 手電筒 360 度瞄準滑鼠游標
+    // ==========================================
     private void UpdateFlashlightAim()
     {
         if (flashlight == null || mainCamera == null) return;
 
-        // 取得滑鼠在世界空間的座標
         Vector3 mouseWorldPos = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 aimDirection = (mouseWorldPos - flashlight.position);
+        Vector2 aimDirection = mouseWorldPos - flashlight.position;
 
-        // 角度偏移 -90f 配合 Unity 2D 預設光源朝向
         float angle = Mathf.Atan2(aimDirection.y, aimDirection.x) * Mathf.Rad2Deg - 90f;
         flashlight.rotation = Quaternion.Euler(0, 0, angle);
     }

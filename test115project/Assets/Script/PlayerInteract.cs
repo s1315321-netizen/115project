@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using TMPro;
 
@@ -8,6 +9,7 @@ public class PlayerInteract : MonoBehaviour
 
     private Interactable currentInteractable;
     private Vector3 initialCanvasScale;
+    private Coroutine pickupRoutine; // 用於控制撿取提示的計時協程
 
     void Start()
     {
@@ -47,16 +49,67 @@ public class PlayerInteract : MonoBehaviour
         if (interactable != null)
         {
             currentInteractable = interactable;
-            promptText.text = $"[{currentInteractable.interactKey.ToString()}]";
+
+            // 如果當前沒有正在顯示撿取提示，才立即顯示 [E]
+            if (pickupRoutine == null && promptText != null)
+            {
+                promptText.text = $"[{currentInteractable.interactKey}]";
+            }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.GetComponent<Interactable>() != null)
+        Interactable interactable = collision.GetComponent<Interactable>();
+        if (interactable != null && interactable == currentInteractable)
         {
             currentInteractable = null;
-            promptText.text = "";
+
+            // 重要防呆：撿起物品後地上物件會消失並觸發 Exit 判定，
+            // 只有在「沒有正在顯示撿取提示」時才清空，避免剛跳出的道具名稱被瞬間洗掉
+            if (pickupRoutine == null && promptText != null)
+            {
+                promptText.text = "";
+            }
         }
+    }
+
+    /// <summary>
+    /// 當撿到物品時呼叫：把 [E] 暫時換成道具名稱，1.5 秒後自動還原
+    /// </summary>
+    public void ShowPickupPrompt(string itemName, float duration = 1.5f)
+    {
+        if (pickupRoutine != null)
+        {
+            StopCoroutine(pickupRoutine);
+        }
+        pickupRoutine = StartCoroutine(PickupPromptRoutine(itemName, duration));
+    }
+
+    private IEnumerator PickupPromptRoutine(string itemName, float duration)
+    {
+        // 1. 將頭頂文字替換為道具名稱 (前面加 + 號更具辨識度)
+        if (promptText != null)
+        {
+            promptText.text = $"+ {itemName}";
+        }
+
+        // 2. 停留 1.5 秒
+        yield return new WaitForSeconds(duration);
+
+        // 3. 還原文字：若主角身邊還有其他可互動對象則還原成 [按鍵]，否則清空
+        if (promptText != null)
+        {
+            if (currentInteractable != null)
+            {
+                promptText.text = $"[{currentInteractable.interactKey}]";
+            }
+            else
+            {
+                promptText.text = "";
+            }
+        }
+
+        pickupRoutine = null;
     }
 }

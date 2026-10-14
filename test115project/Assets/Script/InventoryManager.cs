@@ -171,6 +171,14 @@ public class InventoryManager : MonoBehaviour
     {
         items.Add(newItem);
         Debug.Log($"[背包] 獲得道具: {newItem.itemName} (ID: {newItem.itemID})");
+       
+
+        // 通知主角頭上的提示文字顯示剛撿到的道具名稱
+        PlayerInteract interact = FindObjectOfType<PlayerInteract>();
+        if (interact != null)
+        {
+            interact.ShowPickupPrompt(newItem.itemName);
+        }
     }
 
     public bool HasItem(string id)

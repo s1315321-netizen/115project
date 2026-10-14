@@ -1,29 +1,37 @@
 using System.Collections;
 using UnityEngine;
-using TMPro; // 引入 TextMeshPro
+using TMPro;
 
 public class SafeBox : Interactable
 {
     [Header("--- UI 設定 ---")]
-    public GameObject safeUI;          // 保險箱操作介面的 Canvas/Panel
-    public TMP_Text codeDisplayText;   // 顯示目前輸入數字的文字 (例如 "248_")
+    public GameObject safeUI;
+    public TMP_Text codeDisplayText;
 
     [Header("--- 密碼設定 ---")]
-    public string correctCode = "2486"; // 正確密碼
-    private string currentInput = "";   // 玩家當前輸入的字串
+    public string correctCode = "2486";
+    private string currentInput = "";
 
-    [Header("--- 解鎖後的獎勵/外觀 ---")]
-    public GameObject rewardItem;       // 解鎖後掉出/顯示的物品 (例如鑰匙)
-    public SpriteRenderer safeRenderer; // 保險箱本體的圖片
-    public Sprite openedSprite;         // 保險箱打開後的圖片 (選填)
+    [Header("--- 解鎖後的獎勵 ---")]
+    [Tooltip("勾選後：密碼正確時直接把鑰匙加入背包；取消勾選：只在地上/保險箱顯示實體鑰匙")]
+    public bool giveDirectlyToInventory = true;
 
-    private bool isOpened = false;      // 是否已經解鎖過
-    private bool isInteracting = false; // 是否正在操作保險箱
+    [Tooltip("給予的道具資料 (填入鑰匙的 ID、名稱、Icon、說明)")]
+    public Item rewardItemData;
+
+    [Tooltip("若想在地上/保險箱顯示實體鑰匙物件，可拖進來 (需掛載 PickupItem)")]
+    public GameObject physicalKeyObject;
+
+    [Header("--- 保險箱外觀切換 (選填) ---")]
+    public SpriteRenderer safeRenderer;
+    public Sprite openedSprite;
+
+    private bool isOpened = false;
+    private bool isInteracting = false;
     private PlayerMovement playerMovement;
 
     void Start()
     {
-        // 自動找到主角與移動腳本
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
@@ -31,24 +39,26 @@ public class SafeBox : Interactable
         }
 
         UpdateDisplay();
+
+        // 實體鑰匙一開始先隱藏
+        if (physicalKeyObject != null)
+        {
+            physicalKeyObject.SetActive(false);
+        }
     }
 
-    // 繼承自 Interactable：靠近按 E 觸發
     public override void Interact()
     {
-        // 如果已經打開過了，就不用再開密碼盤
         if (isOpened)
         {
-            Debug.Log("保險箱已經是打開的狀態了。");
+            Debug.Log("保險箱已經被打開過了。");
             return;
         }
 
-        // 切換介面開關
         isInteracting = !isInteracting;
         ToggleSafeUI(isInteracting);
     }
 
-    // 開關 UI 與鎖定/解鎖角色
     public void ToggleSafeUI(bool open)
     {
         isInteracting = open;
@@ -58,15 +68,15 @@ public class SafeBox : Interactable
             safeUI.SetActive(open);
         }
 
-        // 鎖定或解鎖角色移動（跟 ViewPainting 完全相同）
         if (playerMovement != null)
         {
             playerMovement.enabled = !open;
 
             if (open)
             {
-                // 打開瞬間完全煞車
-                playerMovement.GetComponent<Rigidbody2D>().velocity = Vector2.zero;
+                Rigidbody2D rb = playerMovement.GetComponent<Rigidbody2D>();
+                if (rb != null) rb.velocity = Vector2.zero;
+
                 if (playerMovement.anim != null)
                 {
                     playerMovement.anim.SetFloat("Speed", 0f);
@@ -74,7 +84,6 @@ public class SafeBox : Interactable
             }
         }
 
-        // 打開介面時清空之前的輸入
         if (open)
         {
             currentInput = "";
@@ -82,16 +91,13 @@ public class SafeBox : Interactable
         }
     }
 
-    // --- 給 UI 數字按鈕點擊呼叫的函式 (0~9) ---
     public void PressNumber(string number)
     {
-        // 限制最多只能輸入 4 位數
         if (currentInput.Length < 4)
         {
             currentInput += number;
             UpdateDisplay();
 
-            // 輸入滿 4 位數時自動判定
             if (currentInput.Length == 4)
             {
                 StartCoroutine(CheckCodeRoutine());
@@ -99,14 +105,12 @@ public class SafeBox : Interactable
         }
     }
 
-    // --- 清除輸入 (C 鍵) ---
     public void ClearInput()
     {
         currentInput = "";
         UpdateDisplay();
     }
 
-    // 檢查密碼協程
     private IEnumerator CheckCodeRoutine()
     {
         yield return new WaitForSeconds(0.2f);
@@ -114,30 +118,43 @@ public class SafeBox : Interactable
         if (currentInput == correctCode)
         {
             // 【密碼正確】
-            codeDisplayText.text = "OPEN!";
+            codeDisplayText.text = "<color=green>OPEN</color>";
             isOpened = true;
 
             yield return new WaitForSeconds(0.8f);
 
-            // 1. 換成打開的圖片 (如果有設定)
+            // 1. 保險箱外觀切換為打開狀態
             if (safeRenderer != null && openedSprite != null)
             {
                 safeRenderer.sprite = openedSprite;
             }
 
-            // 2. 顯示裡面的獎勵 (例如鑰匙)
-            if (rewardItem != null)
+            // 2. 發放鑰匙獎勵
+            if (giveDirectlyToInventory)
             {
-                rewardItem.SetActive(true);
+                // 方式 A：直接放進背包
+                if (rewardItemData != null && InventoryManager.Instance != null)
+                {
+                    InventoryManager.Instance.AddItem(rewardItemData);
+                    Debug.Log($"[保險箱] 已將 {rewardItemData.itemName} 放入背包！");
+                }
+            }
+            else
+            {
+                // 方式 B：在地上/保險箱中顯示實體鑰匙，讓玩家按 E 撿走
+                if (physicalKeyObject != null)
+                {
+                    physicalKeyObject.SetActive(true);
+                }
             }
 
-            Debug.Log("保險箱解鎖成功！");
-            ToggleSafeUI(false); // 自動關閉保險箱介面
+            // 關閉保險箱 UI，恢復玩家移動
+            ToggleSafeUI(false);
         }
         else
         {
             // 【密碼錯誤】
-            codeDisplayText.text = "ERROR!";
+            codeDisplayText.text = "<color=red>ERROR</color>";
             yield return new WaitForSeconds(0.8f);
 
             currentInput = "";
@@ -145,26 +162,22 @@ public class SafeBox : Interactable
         }
     }
 
-    // 更新螢幕上的顯示文字
     private void UpdateDisplay()
     {
         if (codeDisplayText != null)
         {
             string display = "";
-
-            // 固定跑 4 格：有輸入就顯示該數字，沒輸入就補底線
             for (int i = 0; i < 4; i++)
             {
                 if (i < currentInput.Length)
                 {
-                    display += currentInput[i] + " "; // 顯示輸入的數字並加空格
+                    display += currentInput[i] + " ";
                 }
                 else
                 {
-                    display += "_ "; // 顯示底線並加空格
+                    display += "_ ";
                 }
             }
-
             codeDisplayText.text = display.TrimEnd();
         }
     }

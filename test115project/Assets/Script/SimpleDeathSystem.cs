@@ -43,26 +43,32 @@ public class SimpleDeathSystem : MonoBehaviour
 
     private void Start()
     {
-        // 1. 初始化：將影片畫面設為完全透明 (Alpha = 0)
+        // 1. 開局確保允許暫停
+        PauseManager.EnablePause();
+
+        // 2. 初始化：將影片畫面設為完全透明 (Alpha = 0)
         SetRawImageAlpha(0f);
 
-        // 2. 死亡面板預設關閉
+        // 3. 死亡面板預設關閉
         if (gameOverUI != null) gameOverUI.SetActive(false);
 
-        // 3. 預載影片
+        // 4. 預載影片
         if (videoPlayer != null && videoPlayer.isActiveAndEnabled)
         {
             videoPlayer.Prepare();
         }
     }
 
-    /// 
+    /// <summary>
     /// 女鬼撞到玩家時呼叫
-    /// 
+    /// </summary>
     public void TriggerDeath()
     {
         if (isDead) return;
         isDead = true;
+
+        // 【關鍵】：死亡瞬間立即停用暫停功能，避免按 ESC 破壞驚悚演出
+        PauseManager.DisablePause();
 
         StartCoroutine(DeathProcess());
     }
@@ -107,9 +113,9 @@ public class SimpleDeathSystem : MonoBehaviour
         if (deathAmbienceSource != null) deathAmbienceSource.Play();
     }
 
-    /// 
+    /// <summary>
     /// 點擊【重生】按鈕
-    /// 
+    /// </summary>
     public void Btn_RestartGame()
     {
         if (deathAmbienceSource != null) deathAmbienceSource.Stop();
@@ -156,14 +162,18 @@ public class SimpleDeathSystem : MonoBehaviour
         }
 
         isDead = false;
+
+        // 【關鍵】：玩家復活重生後，重新啟用暫停功能
+        PauseManager.EnablePause();
     }
 
-    /// 
+    /// <summary>
     /// 點擊【Home】按鈕
-    /// 
+    /// </summary>
     public void Btn_BackToMenu()
     {
         Time.timeScale = 1f;
+        PauseManager.EnablePause(); // 回主選單時還原暫停狀態
         SceneManager.LoadScene(mainMenuSceneName);
     }
 
