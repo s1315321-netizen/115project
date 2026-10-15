@@ -1,31 +1,38 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.Rendering.Universal; // 支援 URP 2D 光源
+using UnityEngine.Rendering.Universal;
 
 public class FlashlightController : MonoBehaviour
 {
-    [Header("--- 光源與開關 ---")]
-    public Light2D flashlightLight;           // 手電筒的 Light 2D 元件
-    public KeyCode toggleKey = KeyCode.F;     // 開關手電筒按鍵
-    public bool isLightOn = true;             // 當前手電筒是否開啟
+    [Header("--- Light & Toggle Settings ---")]
+    public Light2D flashlightLight;
+    public KeyCode toggleKey = KeyCode.F;
+    public bool isLightOn = true;
 
-    [Header("--- 電量設定 ---")]
-    public float maxBattery = 100f;           // 最大電量
-    public float currentBattery = 100f;       // 當前電量
-    public float drainRate = 2f;              // 每秒消耗電量 (100 / 2 = 可支撐 50 秒)
-    public float rechargeAmount = 100f;       // 每顆電池補充的電量
+    [Header("--- Battery Settings ---")]
+    public float maxBattery = 100f;
+    public float currentBattery = 100f;
+    public float drainRate = 2f;
+    public float rechargeAmount = 100f;
 
-    [Header("--- 更換電池設定 ---")]
-    public KeyCode reloadKey = KeyCode.R;     // 換電池按鍵
-    public string batteryItemID = "Battery";  // 背包中電池的道具 ID
+    [Header("--- Reload Settings ---")]
+    public KeyCode reloadKey = KeyCode.R;
+    public string batteryItemID = "Battery";
+    public string reloadPromptMessage = "Battery Reloaded"; // 頭頂顯示的文字
 
-    [Header("--- UI 介面 (選填) ---")]
-    public Slider batterySlider;              // 畫面上的電量條
+    [Header("--- UI Slider & Colors ---")]
+    public Slider batterySlider;
+    public Image batteryFillImage;            // Slider 的 Fill 物件（可拖入或自動抓取）
+    public Color fullBatteryColor = new Color(0.2f, 0.85f, 0.2f); // 綠色 (>50%)
+    public Color midBatteryColor = new Color(1f, 0.85f, 0.1f);    // 黃色 (<=50%)
+    public Color lowBatteryColor = new Color(0.9f, 0.2f, 0.2f);    // 紅色 (<=20%)
 
-    [Header("--- 低電量閃爍效果 ---")]
-    public float lowBatteryThreshold = 20f;   // 低於 20% 開始閃爍
-    private float defaultIntensity = 1f;      // 記錄原本光照強度
+    [Header("--- Low Battery Flicker ---")]
+    public float lowBatteryThreshold = 20f;
+    private float defaultIntensity = 1f;
+
+    private PlayerInteract playerInteract;
 
     void Start()
     {
@@ -35,17 +42,31 @@ public class FlashlightController : MonoBehaviour
             flashlightLight.enabled = isLightOn;
         }
 
+        // 自動抓取主角身上的 PlayerInteract 供頭頂提示使用
+        playerInteract = GetComponentInParent<PlayerInteract>();
+        if (playerInteract == null)
+        {
+            playerInteract = FindObjectOfType<PlayerInteract>();
+        }
+
+        // 自動抓取 Slider 內部的 Fill Image（若 Inspector 沒手動拉）
+        if (batteryFillImage == null && batterySlider != null && batterySlider.fillRect != null)
+        {
+            batteryFillImage = batterySlider.fillRect.GetComponent<Image>();
+        }
+
         currentBattery = maxBattery;
         UpdateUI();
     }
 
     void Update()
     {
+        // 暫停時不處理操作與耗電
         if (PauseManager.IsGamePaused) return;
-        // 1. 開關手電筒 (F 鍵)
+
+        // 1. 開關手電筒 (F)
         if (Input.GetKeyDown(toggleKey))
         {
-            // 只有在還有電的情況下才能打開
             if (currentBattery > 0)
             {
                 isLightOn = !isLightOn;
@@ -53,18 +74,17 @@ public class FlashlightController : MonoBehaviour
             }
         }
 
-        // 2. 更換電池 (R 鍵)
+        // 2. 更換電池 (R)
         if (Input.GetKeyDown(reloadKey))
         {
             TryReloadBattery();
         }
 
-        // 3. 消耗電量
+        // 3. 電量消耗與閃爍
         if (isLightOn && currentBattery > 0)
         {
             currentBattery -= drainRate * Time.deltaTime;
 
-            // 低電量隨機閃爍
             if (currentBattery <= lowBatteryThreshold)
             {
                 HandleFlicker();
@@ -74,20 +94,18 @@ public class FlashlightController : MonoBehaviour
                 flashlightLight.intensity = defaultIntensity;
             }
 
-            // 電量耗盡
             if (currentBattery <= 0)
             {
                 currentBattery = 0;
                 isLightOn = false;
                 ApplyLightState();
-                Debug.Log("手電筒沒電了！");
+                Debug.Log("Flashlight battery depleted!");
             }
 
             UpdateUI();
         }
     }
 
-    // 切換燈光開關狀態
     private void ApplyLightState()
     {
         if (flashlightLight != null)
@@ -100,42 +118,57 @@ public class FlashlightController : MonoBehaviour
         }
     }
 
-    // 嘗試從背包拿電池更換
+    /// <summary>
+    /// 嘗試從背包拿電池更換
+    /// </summary>
     private void TryReloadBattery()
     {
-        // 滿電時不需要更換
         if (currentBattery >= maxBattery)
         {
-            Debug.Log("手電筒電量已經是滿的。");
+            Debug.Log("Flashlight battery is already full.");
             return;
         }
 
-        // 檢查背包是否有電池
         if (InventoryManager.Instance != null && InventoryManager.Instance.HasItem(batteryItemID))
         {
             // 消耗一顆電池
             InventoryManager.Instance.RemoveItem(batteryItemID);
 
-            // 補充手電筒電量
+            // 補充手電筒電量並點亮
             currentBattery = Mathf.Min(currentBattery + rechargeAmount, maxBattery);
             isLightOn = true;
             ApplyLightState();
             UpdateUI();
 
-            Debug.Log($"[手電筒] 已使用電池換電！目前電量: {Mathf.RoundToInt(currentBattery)}%");
+            // 【頭頂提示】：在角色頭上跳出提示
+            if (playerInteract != null)
+            {
+                playerInteract.ShowPickupPrompt(reloadPromptMessage);
+            }
+
+            Debug.Log($"[Flashlight] Battery reloaded! Current battery: {Mathf.RoundToInt(currentBattery)}%");
         }
         else
         {
-            Debug.Log("背包裡沒有電池了！");
+            Debug.Log("No spare batteries in inventory!");
         }
     }
 
-    // 低電量時的恐怖閃爍感
+    /// <summary>
+    /// 重生或重置時呼叫
+    /// </summary>
+    public void ResetFlashlight(bool turnOn = true)
+    {
+        currentBattery = maxBattery;
+        isLightOn = turnOn;
+        ApplyLightState();
+        UpdateUI();
+    }
+
     private void HandleFlicker()
     {
         if (flashlightLight == null) return;
 
-        // 30% 機率輕微暗一下，模擬電壓不穩
         if (Random.value < 0.3f)
         {
             flashlightLight.intensity = defaultIntensity * Random.Range(0.2f, 0.7f);
@@ -146,13 +179,37 @@ public class FlashlightController : MonoBehaviour
         }
     }
 
-    // 更新電量條 UI
+    /// <summary>
+    /// 更新電量條數值與顏色
+    /// </summary>
     private void UpdateUI()
     {
         if (batterySlider != null)
         {
             batterySlider.maxValue = maxBattery;
             batterySlider.value = currentBattery;
+        }
+
+        // 依據電量比例切換顏色
+        if (batteryFillImage != null)
+        {
+            float percent = currentBattery / maxBattery;
+
+            if (percent <= 0.2f)
+            {
+                // 剩餘 20% 以下：紅色
+                batteryFillImage.color = lowBatteryColor;
+            }
+            else if (percent <= 0.5f)
+            {
+                // 剩餘 50% 以下：黃色
+                batteryFillImage.color = midBatteryColor;
+            }
+            else
+            {
+                // 大於 50%：綠色
+                batteryFillImage.color = fullBatteryColor;
+            }
         }
     }
 }

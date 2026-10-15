@@ -1,17 +1,24 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseManager : MonoBehaviour
 {
     public static bool IsGamePaused { get; private set; } = false;
-    public static bool canPause = true; // 全域暫停開關：死亡或過場時可設為 false
+    public static bool canPause = true; // 與死亡系統連動：死亡時為 false
     public static PauseManager Instance { get; private set; }
 
-    [Header("--- UI References ---")]
+    [Header("--- UI 面板 ---")]
+    [Tooltip("遊戲內的 PauseMenuUI 面板")]
     public GameObject pauseMenuUI;
+    [Tooltip("遊戲內的 OptionsMenuUI 面板 (Prefab)")]
     public GameObject optionsMenuUI;
 
-    [Header("--- Audio Settings (Optional) ---")]
-    [Tooltip("暫停時是否同時靜音場景音效")]
+    [Header("--- 場景切換 ---")]
+    [Tooltip("主選單場景名稱 (請確認大小寫與 Build Settings 一致)")]
+    public string mainMenuSceneName = "MainMenu";
+
+    [Header("--- 音效設定 ---")]
+    [Tooltip("暫停時是否同時靜音全域音效")]
     public bool pauseAudioOnPause = true;
 
     void Awake()
@@ -26,7 +33,7 @@ public class PauseManager : MonoBehaviour
 
     void Start()
     {
-        canPause = true; // 重進遊戲或重新載入場景時重置為允許暫停
+        canPause = true;
         Resume();
 
         if (optionsMenuUI != null)
@@ -37,7 +44,7 @@ public class PauseManager : MonoBehaviour
 
     void Update()
     {
-        // 關鍵：如果暫停功能被停用（例如玩家已死亡），直接忽略 ESC 鍵
+        // 死亡演出或特定過場時禁止呼叫暫停
         if (!canPause) return;
 
         if (Input.GetKeyDown(KeyCode.Escape))
@@ -47,13 +54,41 @@ public class PauseManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 當玩家死亡、觸發 Jumpscare 或播放過場動畫時呼叫此方法
+    /// ESC 鍵響應優先權處理
+    /// </summary>
+    private void HandleEscapeKey()
+    {
+        // 1. 若設定選單開著：按 ESC 返回暫停選單
+        if (optionsMenuUI != null && optionsMenuUI.activeSelf)
+        {
+            CloseOptions();
+            return;
+        }
+
+        // 2. 若暫停選單開著：按 ESC 恢復遊戲
+        if (IsGamePaused)
+        {
+            Resume();
+            return;
+        }
+
+        // 3. 若背包開著：按 ESC 優先關閉背包
+        if (InventoryManager.Instance != null && InventoryManager.Instance.inventoryUI != null && InventoryManager.Instance.inventoryUI.activeSelf)
+        {
+            InventoryManager.Instance.ToggleInventory();
+            return;
+        }
+
+        // 4. 正常遊玩中：按 ESC 開啟暫停
+        Pause();
+    }
+
+    /// <summary>
+    /// 供外部 (如 SimpleDeathSystem) 死亡時禁用暫停功能
     /// </summary>
     public static void DisablePause()
     {
         canPause = false;
-
-        // 若死亡瞬間暫停選單剛好開著，強制關閉並恢復時間流速，確保死亡協程正常執行
         if (Instance != null && IsGamePaused)
         {
             Instance.Resume();
@@ -61,34 +96,11 @@ public class PauseManager : MonoBehaviour
     }
 
     /// <summary>
-    /// 復活或重新開始時呼叫此方法重新啟用暫停
+    /// 供外部重生時重新啟用暫停功能
     /// </summary>
     public static void EnablePause()
     {
         canPause = true;
-    }
-
-    private void HandleEscapeKey()
-    {
-        if (optionsMenuUI != null && optionsMenuUI.activeSelf)
-        {
-            CloseOptions();
-            return;
-        }
-
-        if (IsGamePaused)
-        {
-            Resume();
-            return;
-        }
-
-        if (InventoryManager.Instance != null && InventoryManager.Instance.inventoryUI != null && InventoryManager.Instance.inventoryUI.activeSelf)
-        {
-            InventoryManager.Instance.ToggleInventory();
-            return;
-        }
-
-        Pause();
     }
 
     public void Pause()
@@ -100,6 +112,10 @@ public class PauseManager : MonoBehaviour
 
         Time.timeScale = 0f;
         IsGamePaused = true;
+
+        // 解除游標鎖定，確保能點擊選單
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
 
         if (pauseAudioOnPause)
         {
@@ -131,6 +147,16 @@ public class PauseManager : MonoBehaviour
     {
         if (optionsMenuUI != null) optionsMenuUI.SetActive(false);
         if (pauseMenuUI != null) pauseMenuUI.SetActive(true);
+    }
+
+    public void GoToMainMenu()
+    {
+        Time.timeScale = 1f;
+        AudioListener.pause = false;
+        IsGamePaused = false;
+        canPause = true;
+
+        SceneManager.LoadScene(mainMenuSceneName);
     }
 
     public void QuitGame()
