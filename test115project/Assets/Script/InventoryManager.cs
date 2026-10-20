@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class InventoryManager : MonoBehaviour
@@ -18,7 +19,7 @@ public class InventoryManager : MonoBehaviour
 
     [Header("--- 道具詳細資訊欄 (選填) ---")]
     public TMP_Text detailNameText;            // 顯示點選道具的名稱
-    public TMP_Text detailDescText;            // 顯示點選道具的說明 (例如紙條內容)
+    public TMP_Text detailDescText;            // 顯示點選道具的說明
     public Image detailIconImage;              // 顯示點選道具的放大圖
 
     private bool isInventoryOpen = false;
@@ -36,30 +37,51 @@ public class InventoryManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
     }
 
+    void OnEnable()
+    {
+        // 註冊場景切換事件，避免跨場景時主角或 UI 參照遺失
+        SceneManager.sceneLoaded += OnSceneLoaded;
+    }
+
+    void OnDisable()
+    {
+        SceneManager.sceneLoaded -= OnSceneLoaded;
+    }
+
     void Start()
     {
-        // 抓取主角
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
-        {
-            playerMovement = player.GetComponent<PlayerMovement>();
-        }
-
-        // 初始化產生固定數量的格子
+        FindPlayer();
         InitSlots();
 
-        // 預設關閉背包 UI
         if (inventoryUI != null)
         {
             inventoryUI.SetActive(false);
         }
     }
 
+    private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+    {
+        // 進入新場景時重新定位主角與狀態
+        FindPlayer();
+        isInventoryOpen = false;
+        if (inventoryUI != null) inventoryUI.SetActive(false);
+    }
+
+    private void FindPlayer()
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
+        {
+            playerMovement = player.GetComponent<PlayerMovement>();
+        }
+    }
+
     void Update()
     {
-        // 按 TAB 鍵切換背包開關
+        // 按 TAB 鍵切換背包開關 (若暫停選單開著則不允許開背包)
         if (Input.GetKeyDown(KeyCode.Tab))
         {
+            if (PauseManager.IsGamePaused) return;
             ToggleInventory();
         }
     }
@@ -73,11 +95,9 @@ public class InventoryManager : MonoBehaviour
             inventoryUI.SetActive(isInventoryOpen);
         }
 
-        // 鎖定/解鎖角色移動與煞車
         if (playerMovement == null)
         {
-            GameObject player = GameObject.FindGameObjectWithTag("Player");
-            if (player != null) playerMovement = player.GetComponent<PlayerMovement>();
+            FindPlayer();
         }
 
         if (playerMovement != null)
@@ -95,25 +115,21 @@ public class InventoryManager : MonoBehaviour
                     playerMovement.anim.SetFloat("Speed", 0f);
                 }
 
-                // 重新刷新介面格子
                 RefreshUI();
             }
         }
     }
 
-    // 動態生成所有格子
     private void InitSlots()
     {
         if (slotsParent == null || slotPrefab == null) return;
 
-        // 清空原本容器內的殘留物件
         foreach (Transform child in slotsParent)
         {
             Destroy(child.gameObject);
         }
         slotList.Clear();
 
-        // 產生指定數量的格子
         for (int i = 0; i < maxSlotCount; i++)
         {
             GameObject slotObj = Instantiate(slotPrefab, slotsParent);
@@ -126,11 +142,12 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    // 重新繪製格子裡的道具
     public void RefreshUI()
     {
         for (int i = 0; i < slotList.Count; i++)
         {
+            if (slotList[i] == null) continue;
+
             if (i < items.Count)
             {
                 slotList[i].SetItem(items[i]);
@@ -141,11 +158,9 @@ public class InventoryManager : MonoBehaviour
             }
         }
 
-        // 清空說明欄
         ClearDetails();
     }
 
-    // 點擊格子時顯示詳細資訊
     public void ShowItemDetails(Item item)
     {
         if (item == null) return;
@@ -161,17 +176,17 @@ public class InventoryManager : MonoBehaviour
 
     private void ClearDetails()
     {
-        if (detailNameText != null) detailNameText.text = "None";
-        if (detailDescText != null) detailDescText.text = "None";
+        if (detailNameText != null) detailNameText.text = "";
+        if (detailDescText != null) detailDescText.text = "";
         if (detailIconImage != null) detailIconImage.gameObject.SetActive(false);
     }
 
-    // --- 給其他系統（例如門 DoorPair）呼叫的判定方法 ---
     public void AddItem(Item newItem)
     {
+        if (newItem == null) return;
+
         items.Add(newItem);
         Debug.Log($"[背包] 獲得道具: {newItem.itemName} (ID: {newItem.itemID})");
-       
 
         // 通知主角頭上的提示文字顯示剛撿到的道具名稱
         PlayerInteract interact = FindObjectOfType<PlayerInteract>();
@@ -181,14 +196,21 @@ public class InventoryManager : MonoBehaviour
         }
     }
 
-    public bool HasItem(string id)
+    /// <summary>
+    /// 支援 ID 或 名稱 雙重檢查
+    /// </summary>
+    public bool HasItem(string idOrName)
     {
-        return items.Exists(x => x.itemID == id);
+        if (string.IsNullOrEmpty(idOrName)) return true;
+        return items.Exists(x => x.itemID == idOrName || x.itemName == idOrName);
     }
 
-    public void RemoveItem(string id)
+    /// <summary>
+    /// 支援 ID 或 名稱 移除道具
+    /// </summary>
+    public void RemoveItem(string idOrName)
     {
-        Item target = items.Find(x => x.itemID == id);
+        Item target = items.Find(x => x.itemID == idOrName || x.itemName == idOrName);
         if (target != null)
         {
             items.Remove(target);

@@ -1664,7 +1664,7 @@ MonoBehaviour:
   brightnessSlider: {fileID: 8929813833147756597}
   brightnessValueText: {fileID: 2399970041417116116}
   globalLight: {fileID: 0}
-  minIntensity: 0.01
+  minIntensity: 0
   maxIntensity: 0.35
   defaultLabel: Brightness
   revertDelay: 1
