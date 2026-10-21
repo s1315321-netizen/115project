@@ -2,26 +2,26 @@ using UnityEngine;
 
 public class PickupItem : Interactable
 {
-    [Header("道具設定")]
-    public Item itemData; // 在 Inspector 設定這個道具的 ID、名字、圖示和說明
+    [Header("--- 道具資料 ---")]
+    public Item itemData;
 
-    [Tooltip("撿起時的提示訊息")]
-    public string pickupMessage = "撿到了道具！";
+    [Header("--- 提示文字設定 ---")]
+    public string interactMessage = "按 E 拾取";
 
+    // 當玩家靠近並按下 E 鍵時觸發
     public override void Interact()
     {
-        if (InventoryManager.Instance != null)
+        if (itemData != null && InventoryManager.Instance != null)
         {
-            // 放入背包
+            // 1. 將道具加入背包
             InventoryManager.Instance.AddItem(itemData);
-            Debug.Log($"{pickupMessage}: {itemData.itemName}");
 
-            // 銷毀地上的物件
+            // 2. 播放音效或銷毀世界物件
             Destroy(gameObject);
         }
         else
         {
-            Debug.LogError("場景中缺少 InventoryManager 物件！");
+            Debug.LogWarning("[PickupItem] 缺少 itemData 或 InventoryManager.Instance 不存在！");
         }
     }
 }

@@ -1,12 +1,14 @@
 using System.Collections;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 public class PlayerInteract : MonoBehaviour
 {
     public TMP_Text promptText;
     public Transform promptCanvas; // 在 Inspector 裡把裝著 Text 的 Canvas 拖進來
-
+    public Slider promptSlider;
+    public Transform promptCanvas1;
     private Interactable currentInteractable;
     private Vector3 initialCanvasScale;
     private Coroutine pickupRoutine;
@@ -31,11 +33,16 @@ public class PlayerInteract : MonoBehaviour
 
     void LateUpdate()
     {
-        // 抵銷主角的左右翻轉，確保文字永遠維持正面
+        // 抵銷主角的左右翻轉，確保提示文字永遠維持正面
         if (promptCanvas != null)
         {
             float parentFacingX = Mathf.Sign(transform.localScale.x);
             promptCanvas.localScale = new Vector3(Mathf.Abs(initialCanvasScale.x) * parentFacingX, initialCanvasScale.y, initialCanvasScale.z);
+        }
+        if (promptCanvas1 != null)
+        {
+            float parentFacingX = Mathf.Sign(transform.localScale.x);
+            promptCanvas1.localScale = new Vector3(Mathf.Abs(initialCanvasScale.x) * parentFacingX, initialCanvasScale.y, initialCanvasScale.z);
         }
     }
 
@@ -81,16 +88,13 @@ public class PlayerInteract : MonoBehaviour
 
     private IEnumerator PickupPromptRoutine(string itemName, float duration)
     {
-        // 移除前綴 '+'，直接顯示純文字
         if (promptText != null)
         {
             promptText.text = itemName;
         }
 
-        // 停留 1.5 秒
         yield return new WaitForSeconds(duration);
 
-        // 還原提示文字
         if (promptText != null)
         {
             if (currentInteractable != null)
