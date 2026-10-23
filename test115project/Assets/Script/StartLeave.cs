@@ -120,7 +120,7 @@ public class SceneLoader : MonoBehaviour
     public void OpenOptions()
     {
         if (isTransitioning) return;
-        if (mainMenuUI != null) mainMenuUI.SetActive(false);
+        
         if (optionsMenuUI != null) optionsMenuUI.SetActive(true);
     }
 
