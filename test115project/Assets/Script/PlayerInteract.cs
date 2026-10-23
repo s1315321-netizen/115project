@@ -9,7 +9,11 @@ public class PlayerInteract : MonoBehaviour
     public Transform promptCanvas; // 在 Inspector 裡把裝著 Text 的 Canvas 拖進來
     public Slider promptSlider;
     public Transform promptCanvas1;
-    private Interactable currentInteractable;
+
+    // 改為陣列，支援同一個物件上同時掛載多個 Interactable 腳本 (例如 VictorySystem + ExamineObject)
+    private Interactable[] currentInteractables;
+    private Collider2D currentCollider;
+
     private Vector3 initialCanvasScale;
     private Coroutine pickupRoutine;
 
@@ -25,9 +29,22 @@ public class PlayerInteract : MonoBehaviour
 
     void Update()
     {
-        if (currentInteractable != null && Input.GetKeyDown(currentInteractable.interactKey))
+        // 如果獨白對話框正在顯示中，暫停場景物件的 E 鍵互動偵測
+        if (MonologueManager.Instance != null && MonologueManager.Instance.IsShowing) return;
+
+        // 當按下互動鍵時，依序觸發該物件身上所有的 Interactable 腳本
+        if (currentInteractables != null && currentInteractables.Length > 0)
         {
-            currentInteractable.Interact();
+            if (Input.GetKeyDown(currentInteractables[0].interactKey))
+            {
+                foreach (Interactable item in currentInteractables)
+                {
+                    if (item != null && item.enabled)
+                    {
+                        item.Interact();
+                    }
+                }
+            }
         }
     }
 
@@ -48,24 +65,26 @@ public class PlayerInteract : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Interactable interactable = collision.GetComponent<Interactable>();
-        if (interactable != null)
+        // 抓取該碰撞體身上所有的 Interactable 腳本
+        Interactable[] interactables = collision.GetComponents<Interactable>();
+        if (interactables != null && interactables.Length > 0)
         {
-            currentInteractable = interactable;
+            currentInteractables = interactables;
+            currentCollider = collision;
 
             if (pickupRoutine == null && promptText != null)
             {
-                promptText.text = $"[{currentInteractable.interactKey}]";
+                promptText.text = $"[{currentInteractables[0].interactKey}]";
             }
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        Interactable interactable = collision.GetComponent<Interactable>();
-        if (interactable != null && interactable == currentInteractable)
+        if (collision == currentCollider)
         {
-            currentInteractable = null;
+            currentInteractables = null;
+            currentCollider = null;
 
             if (pickupRoutine == null && promptText != null)
             {
@@ -97,9 +116,9 @@ public class PlayerInteract : MonoBehaviour
 
         if (promptText != null)
         {
-            if (currentInteractable != null)
+            if (currentInteractables != null && currentInteractables.Length > 0)
             {
-                promptText.text = $"[{currentInteractable.interactKey}]";
+                promptText.text = $"[{currentInteractables[0].interactKey}]";
             }
             else
             {
