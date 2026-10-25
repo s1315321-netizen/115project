@@ -491,8 +491,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactKey: 101
   monologueLines:
-  - need miankey to esescape.
-  triggerOnce: 0
+  - "\u9700\u8981\u300C\u5927\u9580\u9470\u5319\u300D\u624D\u80FD\u9003\u51FA\u53BB\u3002 "
+  triggerOnce: 1
   audioSource: {fileID: 0}
   examineSound: {fileID: 0}
 --- !u!1 &15843143
@@ -552,10 +552,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: EXIT
+  m_text: "\u96E2\u958B\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -686,10 +686,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Options
+  m_text: "\u8A2D\u5B9A\r\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1052,9 +1052,9 @@ MonoBehaviour:
   searchDuration: 1
   itemToDrop:
     itemID: tool
-    itemName: tool
+    itemName: "\u64AC\u68CD"
     icon: {fileID: 21300000, guid: e40feddd02f1d8e4ea0a1e71212a2f05, type: 3}
-    description: An iron crowbar. It might be useful for prying things open
+    description: "\u4E00\u6839\u9435\u88FD\u64AC\u68CD\u3002\u6216\u8A31\u53EF\u4EE5\u7528\u4F86\u64AC\u958B\u67D0\u4E9B\u6771\u897F\u3002 "
   worldItemPrefab: {fileID: 1575604212}
   dropPoint: {fileID: 1434904800}
   hasSearched: 0
@@ -1721,10 +1721,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: restrat
+  m_text: "\u91CD\u65B0\u958B\u59CB \r\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -2891,9 +2891,9 @@ MonoBehaviour:
   interactKey: 101
   itemData:
     itemID: tip
-    itemName: tip
+    itemName: "\u7D19\u689D"
     icon: {fileID: 21300000, guid: e1ab33b33a82e664a839dd804299f578, type: 3}
-    description: The safe's password might be related to the paintings in the corridor.
+    description: "\u4FDD\u96AA\u7BB1\u5BC6\u78BC\u53EF\u80FD\u8207\u8D70\u5ECA\u7684\u756B\u4F5C\u6709\u95DC\u3002"
   interactMessage: "\u6309 E \u62FE\u53D6"
 --- !u!212 &269818093
 SpriteRenderer:
@@ -3582,10 +3582,9 @@ MonoBehaviour:
   interactKey: 101
   itemData:
     itemID: key102
-    itemName: key102
+    itemName: "102\u865F\u623F\u9470\u5319"
     icon: {fileID: 21300000, guid: de60b7c668af1414fb9621ba555a330d, type: 3}
-    description: "An old tarnished copper key found in the safe.\n Fits the corridor
-      door."
+    description: "\u5728\u4FDD\u96AA\u7BB1\u88E1\u627E\u5230\u7684\u751F\u93FD\u820A\u9470\u5319\u3002\u53EF\u4EE5\u7528\u4F86\u6253\u958B102\u865F\u623F\u7684\u9580\u3002\r\n"
   interactMessage: "\u6309 E \u62FE\u53D6"
 --- !u!61 &360070469
 BoxCollider2D:
@@ -4300,7 +4299,7 @@ MonoBehaviour:
   rechargeAmount: 100
   reloadKey: 114
   batteryItemID: Battery
-  reloadPromptMessage: Battery Reloaded
+  reloadPromptMessage: "\u96FB\u6C60\u88DC\u5145\u4E86"
   batterySlider: {fileID: 996575264}
   batteryFillImage: {fileID: 0}
   fullBatteryColor: {r: 0.2, g: 0.85, b: 0.2, a: 1}
@@ -9889,7 +9888,7 @@ MonoBehaviour:
       m_Calls: []
   m_text: ABC
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -9953,7 +9952,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &540181020
@@ -10013,11 +10012,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '[TAB] OFF
-
-'
+  m_text: "[TAB] \u95DC\u9589\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -10081,7 +10078,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &540181023
@@ -10589,10 +10586,9 @@ MonoBehaviour:
   searchDuration: 1
   itemToDrop:
     itemID: bigkey
-    itemName: mainkey
+    itemName: "\u5927\u9580\u9470\u5319"
     icon: {fileID: 21300000, guid: 725d27c2b4b20694591b75799a4d1064, type: 3}
-    description: A old and heavy iron key found in the chest. it fits the lock of
-      the main door to escape.
+    description: "\u5728\u7BB1\u5B50\u88E1\u627E\u5230\u7684\u6C89\u91CD\u8001\u820A\u7684\u9435\u9470\u5319\u3002\u53EF\u4EE5\u7528\u4F86\u89E3\u958B\u5927\u9580\u7684\u9396\u9003\u96E2\u9019\u88E1\u3002  "
   worldItemPrefab: {fileID: 1209909026}
   dropPoint: {fileID: 1871107146}
   hasSearched: 0
@@ -10973,10 +10969,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: NOOB
+  m_text: "\u4F60\u6B7B\u4E86 "
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -11802,10 +11798,10 @@ MonoBehaviour:
   searchDuration: 1
   itemToDrop:
     itemID: Battery
-    itemName: Battery
+    itemName: "\u96FB\u6C60"
     icon: {fileID: 21300000, guid: 3e1d3d501d6e7734aaebc1edd2042742, type: 3}
-    description: "A fresh battery for the flashlight. \nPress [R] to reload when
-      equipped."
+    description: "\u624B\u96FB\u7B52\u7528\u7684\u65B0\u96FB\u6C60\u3002\u88DD\u5099\u624B\u96FB\u7B52\u6642\uFF0C\u6309\u4E0B
+      [R] \u9375\u5373\u53EF\u66F4\u63DB\u96FB\u6C60\u3002 "
   worldItemPrefab: {fileID: 273343559}
   dropPoint: {fileID: 490869820}
   hasSearched: 0
@@ -12090,10 +12086,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Quit
+  m_text: "\u96E2\u958B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -12224,12 +12220,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Resume
-
-'
+  m_text: "\u7E7C\u7E8C\u904A\u6232 \r\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -13800,10 +13794,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: EXIT
+  m_text: "\u96E2\u958B \r\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -14501,7 +14495,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 360, y: -200}
-  m_SizeDelta: {x: 200, y: 100}
+  m_SizeDelta: {x: 300, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1050837044
 MonoBehaviour:
@@ -14523,11 +14517,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '  [E] USE
-
-    [TAB] BAG
-
-    [ESC] MENU'
+  m_text: "  [E] \u4F7F\u7528/\u4E92\u52D5\n[TAB] \u7269\u54C1\u6B04\n[ESC] \u9078\u55AE "
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
@@ -14792,7 +14782,7 @@ MonoBehaviour:
   isLocked: 1
   requiredKeyID: 105
   consumeKeyOnUse: 0
-  lockedMessage: "\u9580\u88AB\u9396\u4E0A\u4E86\uFF0C\u9700\u8981\u9470\u5319..."
+  lockedMessage: "\u9580\u88AB\u53CD\u9396\u4E0A\u4E86"
   lockedVisualObject: {fileID: 0}
   unlockedVisualObject: {fileID: 0}
   spawnPoint: {fileID: 1814499991}
@@ -15575,10 +15565,10 @@ MonoBehaviour:
   searchDuration: 1
   itemToDrop:
     itemID: Battery
-    itemName: Battery
+    itemName: "\u96FB\u6C60"
     icon: {fileID: 21300000, guid: 3e1d3d501d6e7734aaebc1edd2042742, type: 3}
-    description: "A fresh battery for the flashlight. \nPress [R] to reload when
-      equipped."
+    description: "\u624B\u96FB\u7B52\u7528\u7684\u65B0\u96FB\u6C60\u3002\u88DD\u5099\u624B\u96FB\u7B52\u6642\uFF0C\u6309\u4E0B
+      [R] \u9375\u5373\u53EF\u66F4\u63DB\u96FB\u6C60\u3002 "
   worldItemPrefab: {fileID: 273343559}
   dropPoint: {fileID: 484143650}
   hasSearched: 0
@@ -15756,10 +15746,10 @@ MonoBehaviour:
   searchDuration: 1
   itemToDrop:
     itemID: Battery
-    itemName: Battery
+    itemName: "\u96FB\u6C60"
     icon: {fileID: 21300000, guid: 3e1d3d501d6e7734aaebc1edd2042742, type: 3}
-    description: "A fresh battery for the flashlight. \nPress [R] to reload when
-      equipped."
+    description: "\u624B\u96FB\u7B52\u7528\u7684\u65B0\u96FB\u6C60\u3002\u88DD\u5099\u624B\u96FB\u7B52\u6642\uFF0C\u6309\u4E0B
+      [R] \u9375\u5373\u53EF\u66F4\u63DB\u96FB\u6C60\u3002 "
   worldItemPrefab: {fileID: 273343559}
   dropPoint: {fileID: 1157094378}
   hasSearched: 0
@@ -16973,10 +16963,10 @@ MonoBehaviour:
   searchDuration: 1
   itemToDrop:
     itemID: Battery
-    itemName: Battery
+    itemName: "\u96FB\u6C60"
     icon: {fileID: 21300000, guid: 3e1d3d501d6e7734aaebc1edd2042742, type: 3}
-    description: "A fresh battery for the flashlight. \nPress [R] to reload when
-      equipped."
+    description: "\u624B\u96FB\u7B52\u7528\u7684\u65B0\u96FB\u6C60\u3002\u88DD\u5099\u624B\u96FB\u7B52\u6642\uFF0C\u6309\u4E0B
+      [R] \u9375\u5373\u53EF\u66F4\u63DB\u96FB\u6C60\u3002 "
   worldItemPrefab: {fileID: 273343559}
   dropPoint: {fileID: 1995650003}
   hasSearched: 0
@@ -17361,10 +17351,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: YOU WIN
+  m_text: "\u6210\u529F\u9003\u812B"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -17832,7 +17822,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactKey: 101
   monologueLines:
-  - This is the window I used to get inside.
+  - "\u9019\u662F\u6211\u525B\u624D\u722C\u9032\u4F86\u6642\u7528\u7684\u7A97\u6236\u3002 "
   triggerOnce: 0
   audioSource: {fileID: 0}
   examineSound: {fileID: 0}
@@ -18115,11 +18105,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '[E] OFF
-
-'
+  m_text: "[E] \u95DC\u9589\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -18183,7 +18171,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1511163512
@@ -18381,7 +18369,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6095412458194311328, guid: 14021a2cf0b06a3468f32f5a5a8b659b, type: 3}
       propertyPath: itemData.itemName
-      value: Battery
+      value: "\u96FB\u6C60"
       objectReference: {fileID: 0}
     - target: {fileID: 7674925860807250409, guid: 14021a2cf0b06a3468f32f5a5a8b659b, type: 3}
       propertyPath: m_LocalPosition.x
@@ -19855,9 +19843,9 @@ MonoBehaviour:
   interactKey: 101
   itemData:
     itemID: tool
-    itemName: tool
+    itemName: "\u64AC\u68CD"
     icon: {fileID: 21300000, guid: e40feddd02f1d8e4ea0a1e71212a2f05, type: 3}
-    description: An iron crowbar. It might be useful for prying things open
+    description: "\u4E00\u6839\u9435\u88FD\u64AC\u68CD\u3002\u6216\u8A31\u53EF\u4EE5\u7528\u4F86\u64AC\u958B\u67D0\u4E9B\u6771\u897F\u3002"
   interactMessage: "\u6309 E \u62FE\u53D6"
 --- !u!61 &1575604215
 BoxCollider2D:
@@ -20760,10 +20748,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: restrat
+  m_text: "\u91CD\u751F \n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -21010,12 +20998,10 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'MainMenu
-
-'
+  m_text: "\u4E3B\u9078\u55AE \r\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
-  m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
+  m_sharedMaterial: {fileID: 7969121761167571168, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -21363,9 +21349,10 @@ MonoBehaviour:
   afterLeaveNoWindowSprite: {fileID: 21300000, guid: 163783d05f7b8b649b38d750eb32afda, type: 3}
   windowObject: {fileID: 1459170533}
   shockDialogue:
-  - Wait... Where is the window?!
-  - It's gone... The way out is completely sealed!
-  - I'm trapped here...
+  - "\u7B49\u7B49\u2026\u2026\u7A97\u6236\u53BB\u54EA\u4E86\uFF1F\uFF01 "
+  - "\u6D88\u5931\u4E86\u2026\u2026\u51FA\u53BB\u7684\u8DEF\u88AB\u5FB9\u5E95\u5C01\u6B7B\u4E86\uFF01
+    \r\n"
+  - "\u6211\u88AB\u56F0\u5728\u9019\u88E1\u4E86\u2026\u2026 "
 --- !u!1 &1758064775
 GameObject:
   m_ObjectHideFlags: 0
@@ -21498,11 +21485,9 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '[E] OFF
-
-'
+  m_text: "[E] \u95DC\u9589\n"
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -21566,7 +21551,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!222 &1770269198
@@ -22300,7 +22285,7 @@ Transform:
   m_GameObject: {fileID: 1871107145}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -0.51, y: -0.7, z: 0}
+  m_LocalPosition: {x: -1.64, y: -0.7, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -22565,10 +22550,10 @@ MonoBehaviour:
   searchDuration: 1
   itemToDrop:
     itemID: Battery
-    itemName: Battery
+    itemName: "\u96FB\u6C60"
     icon: {fileID: 21300000, guid: 3e1d3d501d6e7734aaebc1edd2042742, type: 3}
-    description: "A fresh battery for the flashlight. \nPress [R] to reload when
-      equipped."
+    description: "\u624B\u96FB\u7B52\u7528\u7684\u65B0\u96FB\u6C60\u3002\u88DD\u5099\u624B\u96FB\u7B52\u6642\uFF0C\u6309\u4E0B
+      [R] \u9375\u5373\u53EF\u66F4\u63DB\u96FB\u6C60\u3002 "
   worldItemPrefab: {fileID: 273343559}
   dropPoint: {fileID: 334756432}
   hasSearched: 0
@@ -23304,7 +23289,7 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 9d38978b802b5c747a21f3a343844017, type: 2}
   m_sharedMaterial: {fileID: 2140032, guid: dc36b3fdc14f47ebb36fd484a67e268a, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -23368,7 +23353,7 @@ MonoBehaviour:
   m_margin: {x: 0, y: 0, z: 0, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
-  m_hasFontAssetChanged: 0
+  m_hasFontAssetChanged: 1
   m_baseMaterial: {fileID: 0}
   m_maskOffset: {x: 0, y: 0, z: 0, w: 0}
 --- !u!1 &1949969139
@@ -23821,7 +23806,7 @@ Transform:
   m_GameObject: {fileID: 1995650002}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.09, y: -1.4, z: 0}
+  m_LocalPosition: {x: 0.09, y: -2, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -24592,7 +24577,7 @@ MonoBehaviour:
   isLocked: 1
   requiredKeyID: tool
   consumeKeyOnUse: 0
-  lockedMessage: "\u9580\u88AB\u9396\u4E0A\u4E86\uFF0C\u9700\u8981\u9470\u5319..."
+  lockedMessage: "\u597D\u50CF\u9700\u8981\u5DE5\u5177\u624D\u80FD\u6253\u958B..."
   lockedVisualObject: {fileID: 0}
   unlockedVisualObject: {fileID: 0}
   spawnPoint: {fileID: 1722646154}

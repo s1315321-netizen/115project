@@ -1,0 +1,15 @@
+Font: Cubic 11  Style: Regular
+Point Size: 72   SP/PD Ratio: 6.9%
+
+Characters included: 219/221
+Missing characters: 2
+Excluded characters: 0
+
+Characters missing from font file:
+----------------------------------------
+ID: 13	Hex: D	Char []
+ID: 10	Hex: A	Char [
+]
+
+Characters excluded from packing:
+----------------------------------------

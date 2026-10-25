@@ -146,8 +146,8 @@ MonoBehaviour:
   interactKey: 101
   itemData:
     itemID: Battery
-    itemName: AA Battery
+    itemName: "\u96FB\u6C60"
     icon: {fileID: 21300000, guid: 3e1d3d501d6e7734aaebc1edd2042742, type: 3}
-    description: "A fresh battery for the flashlight. \nPress [R] to reload when
-      equipped."
-  pickupMessage: "\u64BF\u5230\u4E86\u9053\u5177\uFF01"
+    description: "\u624B\u96FB\u7B52\u7528\u7684\u65B0\u96FB\u6C60\u3002\u88DD\u5099\u624B\u96FB\u7B52\u6642\uFF0C\u6309\u4E0B
+      [R] \u9375\u5373\u53EF\u66F4\u63DB\u96FB\u6C60\u3002 "
+  interactMessage: "\u6309 E \u62FE\u53D6"

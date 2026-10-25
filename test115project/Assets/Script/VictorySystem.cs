@@ -65,7 +65,7 @@ public class VictorySystem : Interactable
             PlayerInteract playerInteract = FindObjectOfType<PlayerInteract>();
             if (playerInteract != null)
             {
-                playerInteract.ShowPickupPrompt("need a key to escape");
+                playerInteract.ShowPickupPrompt("");
             }
         }
     }

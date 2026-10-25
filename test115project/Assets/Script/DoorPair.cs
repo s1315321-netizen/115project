@@ -18,7 +18,8 @@ public class DoorPair : Interactable
     public string requiredKeyID = "RoomKey";
     [Tooltip("開門後是否消耗/扣除該鑰匙 (勾選=消耗，不勾=可重複使用)")]
     public bool consumeKeyOnUse = false;
-    public string lockedMessage = "門被鎖上了，需要鑰匙...";
+    [TextArea(2, 4)]
+    public string lockedMessage = "門被鎖上了，需要鑰匙才能打開...";
 
     [Header("--- 門的外觀切換設定 ---")]
     [Tooltip("圖 1：上鎖或未開時顯示的物件 (例如 Wall1_1)")]
@@ -76,7 +77,9 @@ public class DoorPair : Interactable
 
     public override void Interact()
     {
+        // 避免重複觸發傳送，或對話框正在顯示時誤觸
         if (isTeleporting) return;
+        if (MonologueManager.Instance != null && MonologueManager.Instance.IsShowing) return;
 
         // 檢查是否上鎖
         if (isLocked)
@@ -86,14 +89,13 @@ public class DoorPair : Interactable
                 Debug.Log($"[DoorPair] 成功使用 [{requiredKeyID}] 解鎖了門！");
                 isLocked = false;
 
-                // 【核心】：成功解鎖的瞬間，立即將圖 1 切換為圖 2！
+                // 成功解鎖的瞬間，立即將圖 1 切換為圖 2！
                 UpdateDoorVisuals();
             }
             else
             {
-                // 【修改這裡】：組合動態提示訊息（例如：需要 房間鑰匙 才能開門）
-                string promptMsg = string.IsNullOrEmpty(requiredKeyID) ? lockedMessage : $"need [{requiredKeyID}]";
-                Debug.Log(promptMsg);
+                // 【核心修改】：沒有鑰匙時，像 ExamineObject 一樣呼叫 MonologueManager 顯示對話框
+                Debug.Log($"需要鑰匙: {requiredKeyID}");
 
                 // 1. 如果有設定音效，播放解鎖失敗的敲門/上鎖聲
                 if (doorAudioSource != null && doorLockedSound != null)
@@ -101,11 +103,14 @@ public class DoorPair : Interactable
                     doorAudioSource.PlayOneShot(doorLockedSound);
                 }
 
-                // 2. 讓主角頭上的提示系統（PlayerInteract）顯示提示文字
-                PlayerInteract playerInteract = FindObjectOfType<PlayerInteract>();
-                if (playerInteract != null)
+                // 2. 彈出對話框提示玩家
+                if (MonologueManager.Instance != null)
                 {
-                    playerInteract.ShowPickupPrompt(promptMsg); // 可共用提示顯示方法，或依你專案的方法調整
+                    MonologueManager.Instance.ShowMonologue(lockedMessage);
+                }
+                else
+                {
+                    Debug.LogWarning("[DoorPair] 找不到 MonologueManager，無法顯示上鎖訊息！");
                 }
 
                 return;
