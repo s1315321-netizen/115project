@@ -86,7 +86,7 @@ public class FPSSliderSetting : MonoBehaviour, IPointerDownHandler, IPointerUpHa
 
         if (updateText && fpsValueText != null)
         {
-            fpsValueText.text = targetFPS == -1 ? "Unlimited" : $"{targetFPS} FPS";
+            fpsValueText.text = targetFPS == -1 ? "無限制" : $"{targetFPS} FPS";
         }
     }
 
