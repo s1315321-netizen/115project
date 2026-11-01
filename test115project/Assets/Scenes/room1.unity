@@ -11396,7 +11396,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactKey: 101
   monologueLines:
-  - its close!!!!!
+  - "\u88AB\u9396\u4F4F\u4E86..."
   triggerOnce: 0
   audioSource: {fileID: 0}
   examineSound: {fileID: 0}
@@ -19925,7 +19925,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactKey: 101
   monologueLines:
-  - gay......
+  - "\u524D\u9762\u7684\u5340\u57DF\u4EE5\u5F8C\u518D\u4F86\u63A2\u7D22\u5427"
   triggerOnce: 0
   audioSource: {fileID: 0}
   examineSound: {fileID: 0}
@@ -25144,7 +25144,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   interactKey: 101
   monologueLines:
-  - its close!!!!!
+  - "\u88AB\u9396\u4F4F\u4E86..."
   triggerOnce: 0
   audioSource: {fileID: 0}
   examineSound: {fileID: 0}
