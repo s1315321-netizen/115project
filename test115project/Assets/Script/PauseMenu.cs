@@ -151,6 +151,7 @@ public class PauseManager : MonoBehaviour
 
     public void GoToMainMenu()
     {
+        if (GameSaveSystem.Instance != null) GameSaveSystem.Instance.SaveActive();
         Time.timeScale = 1f;
         AudioListener.pause = false;
         IsGamePaused = false;
@@ -161,6 +162,7 @@ public class PauseManager : MonoBehaviour
 
     public void QuitGame()
     {
+        if (GameSaveSystem.Instance != null) GameSaveSystem.Instance.SaveActive();
         Time.timeScale = 1f;
         AudioListener.pause = false;
 

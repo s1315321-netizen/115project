@@ -217,4 +217,19 @@ public class InventoryManager : MonoBehaviour
             RefreshUI();
         }
     }
+
+    public void RestoreItems(List<string> savedIDs)
+    {
+        items.Clear();
+        if (savedIDs != null)
+        {
+            var availableItems = FindObjectsOfType<PickupItem>(true);
+            foreach (string id in savedIDs)
+            {
+                PickupItem source = System.Array.Find(availableItems, p => p != null && p.itemData != null && p.itemData.itemID == id);
+                if (source != null) items.Add(source.itemData);
+            }
+        }
+        RefreshUI();
+    }
 }
